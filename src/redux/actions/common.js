@@ -1,6 +1,8 @@
-import { RESET_STORE } from '../types/common';
+import { RESET_STORE, TOGGLE_DRAWER } from '../types/common';
 
 const resetStore = () => ({ type: RESET_STORE });
 
-export { resetStore };
-export default { resetStore };
+const toggleDrawer = () => ({ type: TOGGLE_DRAWER });
+
+export { resetStore, toggleDrawer };
+export default { resetStore, toggleDrawer };

@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import { Switch, Route } from 'react-router';
+
 import { withStyles } from '@material-ui/core/styles';
 
-import SignUp from './pages/auth/SignUp';
+import { ToastContainer } from 'react-toastify';
 
-import TinyBack from './images/back-tiny.jpg'
+import SignUp from './auth/SignUp';
+import SignIn from './auth/SignIn';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
 
+import TinyBack from '../images/back-tiny.jpg'
+
+import 'react-toastify/dist/ReactToastify.min.css';
 import './App.css';
 
 const styles = theme => ({
@@ -49,7 +57,20 @@ class App extends Component {
     
     return (
       <div>
-        <SignUp />
+        <Header />
+
+        <Sidebar />
+
+        <Switch>
+          <Route path="/sign-up" component={SignUp} />
+          <Route path="/sign-in" component={SignIn} />
+        </Switch>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+        />
+        
         <div className={classes.backgroundContainer}>
           <div className={classes.background}></div>
         </div>
