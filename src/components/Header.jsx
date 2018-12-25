@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { withStyles } from '@material-ui/core/styles';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import ButtonLink from './ButtonLink';
+
 import commonActions from '../redux/actions/common'
+import AccountMenu from './AccountMenu';
 
 const styles = {
   root: {
@@ -22,6 +24,11 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
+  logo: {
+    fontFamily: `'Acme', sans-serif`,
+    fontSize: 26,
+    textTransform: 'none'
+  }
 };
 
 class Header extends Component {
@@ -31,6 +38,7 @@ class Header extends Component {
     const {
       props: {
         classes,
+        auth,
         toggleDrawer
       }
     } = this;
@@ -43,9 +51,18 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              News
+              <ButtonLink to="/" buttonProps={{ className: classes.logo }}>picxr</ButtonLink>
             </Typography>
-            <Button color="inherit">Login</Button>
+            {
+              !auth.user ? (
+                <>
+                  <ButtonLink to="/sign-in">Sign In</ButtonLink>
+                  <ButtonLink to="/sign-up">Sign Up</ButtonLink>
+                </>
+              ) : (
+                <AccountMenu />
+              )
+            }
           </Toolbar>
         </AppBar>
       </div>
@@ -53,8 +70,10 @@ class Header extends Component {
   }
 }
 
+const mapStateToProps = ({ auth }) => ({ auth });
+
 const mapDispatchToProps = dispatch => ({
   toggleDrawer: () => dispatch(commonActions.toggleDrawer())
 });
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(Header));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Header));

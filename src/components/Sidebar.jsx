@@ -3,6 +3,8 @@ import { bool, func } from 'prop-types';
 import { connect } from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import { Link } from 'react-router-dom';
+
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,28 +19,38 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 
 import commonActions from '../redux/actions/common';
 
-const listItems = [
-  {
-    text: 'Users',
-    icon: <FaceIcon />
-  },
-  {
-    text: 'Complaints',
-    icon: <InfoIcon />
-  },
-  {
-    text: 'Bugs',
-    icon: <BugReportIcon />
-  },
-  {
-    text: 'Feedbacks',
-    icon: <FeedbackIcon />
-  }
-];
+const listItems = {
+  admin: [
+    {
+      text: 'Users',
+      link: '/admin/users',
+      icon: <FaceIcon />
+    },
+    {
+      text: 'Complaints',
+      link: '/admin/complaints',
+      icon: <InfoIcon />
+    },
+    {
+      text: 'Bugs',
+      link: '/admin/bugs',
+      icon: <BugReportIcon />
+    },
+    {
+      text: 'Feedbacks',
+      link: '/admin/feedbacks',
+      icon: <FeedbackIcon />
+    }
+  ]
+}
 
 const styles = {
   list: {
     width: 250
+  },
+  listItemLink: {
+    color: 'inherit',
+    textDecoration: 'none'
   }
 };
 
@@ -58,11 +70,13 @@ class Sidebar extends Component {
           <List className={classes.list}>
             <ListSubheader>Admin</ListSubheader>
             {
-              listItems.map(item => (
-                <ListItem button key={item.text}>
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItem>
+              listItems.admin.map(item => (
+                <Link to={item.link} className={classes.listItemLink}>
+                  <ListItem button key={item.text}>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                </Link>
               ))
             }
           </List>

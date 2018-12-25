@@ -6,7 +6,7 @@ const signIn = body => dispatch =>
   axios
     .post('/users/sign-in', body)
     .then(res => {
-      dispatch(authActions.setUser(res.data));
+      dispatch(authActions.setUser(res.data.user));
       return res;
     });
 
