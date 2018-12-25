@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import Paper from '@material-ui/core/Paper';
@@ -14,8 +15,6 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 import authService from '../../services/auth';
-
-import notifications from '../../utilities/notifications';
 
 import styles from './authStyles';
 
@@ -42,6 +41,10 @@ class SignUp extends Component {
     e.preventDefault();
 
     const {
+      props: {
+        signUp,
+        history
+      },
       state: {
         model
       }
@@ -49,9 +52,8 @@ class SignUp extends Component {
 
     this.setState({ error: {}, isLoading: true });
 
-    authService
-      .signUp(model)
-      .then(res => res.data)
+    signUp(model)
+      .then(() => history.push('/'))
       .catch(res => {
         this.setState({ error: res.response.data.error, isLoading: false });
       });
@@ -144,4 +146,8 @@ class SignUp extends Component {
   }
 }
 
-export default withStyles(styles)(SignUp);
+const mapDispatchToProps = dispatch => ({
+  signUp: model => dispatch(authService.signUp(model))
+});
+
+export default withStyles(styles)(connect(null, mapDispatchToProps)(SignUp));

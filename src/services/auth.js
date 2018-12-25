@@ -2,21 +2,20 @@ import axios from 'axios';
 import authActions from '../redux/actions/auth';
 
 
-// TODO redux thunk, save user to store
-const signIn = body =>
+const signIn = body => dispatch =>
   axios
     .post('/users/sign-in', body)
     .then(res => {
-      // authActions.setUser()
-      return res.data
+      dispatch(authActions.setUser(res.data));
+      return res;
     });
 
-const signUp = body =>
+const signUp = body => dispatch =>
     axios
       .post('/users/', body)
       .then(res => {
-        console.log(res);
-        return res.data;
+        dispatch(authActions.setUser(res.data));
+        return res;
       });
 
 export { signIn, signUp };
