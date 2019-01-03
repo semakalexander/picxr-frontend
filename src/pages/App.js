@@ -7,6 +7,8 @@ import { ToastContainer } from 'react-toastify';
 
 import SignUp from './auth/SignUp';
 import SignIn from './auth/SignIn';
+import Users from './admin/Users';
+
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 
@@ -18,7 +20,7 @@ import './App.css';
 const styles = theme => ({
   backgroundContainer: {
     overflow: 'hidden',
-    position: 'absolute',
+    position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
@@ -64,6 +66,7 @@ class App extends Component {
         <Switch>
           <Route path="/sign-up" component={SignUp} />
           <Route path="/sign-in" component={SignIn} />
+          <Route path="/admin/users" component={Users} />
         </Switch>
 
         <ToastContainer
