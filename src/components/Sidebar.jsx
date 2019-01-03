@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { bool, func } from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import { Link } from 'react-router-dom';
@@ -18,6 +19,8 @@ import BugReportIcon from '@material-ui/icons/BugReport';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 
 import commonActions from '../redux/actions/common';
+
+import { bindActionCreators } from '../redux/utils';
 
 const listItems = {
   admin: [
@@ -59,24 +62,29 @@ class Sidebar extends Component {
     const {
       props: {
         isDrawerOpen,
-        toggleDrawer,
+        closeDrawer,
         classes
       }
     } = this;
 
     return (
       <div>
-        <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
+        <Drawer open={isDrawerOpen} onClose={closeDrawer}>
           <List className={classes.list}>
             <ListSubheader>Admin</ListSubheader>
             {
               listItems.admin.map(item => (
-                <Link to={item.link} className={classes.listItemLink}>
-                  <ListItem button key={item.text}>
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
-                  </ListItem>
-                </Link>
+                <div key={item.text} onClick={closeDrawer}>
+                  <Link
+                    to={item.link}
+                    className={classes.listItemLink}
+                  >
+                    <ListItem button>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  </Link>
+                </div>
               ))
             }
           </List>
@@ -88,13 +96,16 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   isDrawerOpen: bool,
-  toggleDrawer: func,
+  closeDrawer: func,
 };
 
 const mapStateToProps = ({ common: { isDrawerOpen } }) => ({ isDrawerOpen });
 
-const mapDispatchToProps = dispatch => ({
-  toggleDrawer: () => dispatch(commonActions.toggleDrawer())
+const mapDispatchToProps = bindActionCreators({
+  closeDrawer: commonActions.closeDrawer
 });
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Sidebar));
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps)
+)(Sidebar);

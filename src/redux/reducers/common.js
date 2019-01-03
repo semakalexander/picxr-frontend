@@ -1,4 +1,6 @@
 import {
+  OPEN_DRAWER,
+  CLOSE_DRAWER,
   TOGGLE_DRAWER,
   RESET_STORE
 } from '../types/common';
@@ -9,6 +11,16 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch(action.type) {
+    case OPEN_DRAWER:
+      return {
+        ...state,
+        isDrawerOpen: true
+      };
+    case CLOSE_DRAWER:
+      return {
+        ...state,
+        isDrawerOpen: false
+      };
     case TOGGLE_DRAWER:
       return {
         ...state,
