@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
+import { BrowserRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './index.css';
+
 import App from './pages/App';
 
 import store from './redux/store';
@@ -42,7 +43,7 @@ ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        <App />
+        <Route path="/" component={App} />
       </BrowserRouter>
     </MuiThemeProvider>
   </Provider>

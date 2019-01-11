@@ -39,7 +39,7 @@ class Header extends Component {
       props: {
         classes,
         auth,
-        toggleDrawer
+        toggleLeftSidebar
       }
     } = this;
 
@@ -47,7 +47,7 @@ class Header extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={toggleDrawer}>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={toggleLeftSidebar}>
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
@@ -73,7 +73,7 @@ class Header extends Component {
 const mapStateToProps = ({ auth }) => ({ auth });
 
 const mapDispatchToProps = dispatch => ({
-  toggleDrawer: () => dispatch(commonActions.toggleDrawer())
+  toggleLeftSidebar: () => dispatch(commonActions.toggleLeftSidebar())
 });
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Header));

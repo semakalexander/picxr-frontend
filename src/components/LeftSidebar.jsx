@@ -61,20 +61,19 @@ class Sidebar extends Component {
   render() {
     const {
       props: {
-        isDrawerOpen,
-        closeDrawer,
+        isLeftSidebarOpen,
+        closeLeftSidebar,
         classes
       }
     } = this;
 
     return (
-      <div>
-        <Drawer open={isDrawerOpen} onClose={closeDrawer}>
-          <List className={classes.list}>
-            <ListSubheader>Admin</ListSubheader>
+      <Drawer open={isLeftSidebarOpen} onClose={closeLeftSidebar}>
+        <List className={classes.list}>
+          <ListSubheader>Admin</ListSubheader>
             {
               listItems.admin.map(item => (
-                <div key={item.text} onClick={closeDrawer}>
+                <div key={item.text} onClick={closeLeftSidebar}>
                   <Link
                     to={item.link}
                     className={classes.listItemLink}
@@ -89,20 +88,19 @@ class Sidebar extends Component {
             }
           </List>
         </Drawer>
-      </div>
     );
   }
 }
 
 Sidebar.propTypes = {
-  isDrawerOpen: bool,
+  isLeftSidebarOpen: bool,
   closeDrawer: func,
 };
 
-const mapStateToProps = ({ common: { isDrawerOpen } }) => ({ isDrawerOpen });
+const mapStateToProps = ({ common: { isLeftSidebarOpen } }) => ({ isLeftSidebarOpen });
 
 const mapDispatchToProps = bindActionCreators({
-  closeDrawer: commonActions.closeDrawer
+  closeLeftSidebar: commonActions.closeLeftSidebar
 });
 
 export default compose(

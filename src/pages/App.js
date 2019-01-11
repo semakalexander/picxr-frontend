@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router';
-
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import Cookies from 'js-cookie';
 
+import { Switch, Route } from 'react-router';
+import { CircularProgress } from '@material-ui/core';
 import { ToastContainer } from 'react-toastify';
 
 import SignUp from './auth/SignUp';
@@ -10,12 +12,18 @@ import SignIn from './auth/SignIn';
 import Users from './admin/Users';
 
 import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
+import LeftSidebar from '../components/LeftSidebar';
+import RightSidebar from '../components/RightSidebar';
+
+import authService from '../services/auth';
 
 import TinyBack from '../images/back-tiny.jpg'
 
 import 'react-toastify/dist/ReactToastify.min.css';
-import './App.css';
+import './App.scss';
+import authActions from '../redux/actions/auth';
+import { bindActionCreators } from '../redux/utils';
+import { compose } from 'redux';
 
 const styles = theme => ({
   backgroundContainer: {
@@ -46,22 +54,67 @@ const styles = theme => ({
     overflow: 'hidden',
     position: 'absolute',
     transform: 'scale(1.1)'
+  },
+  loaderContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing.unit * 8
   }
 });
 
 class App extends Component {
+  state = {
+    isLoading: true
+  }
+
+  componentDidMount() {
+    const {
+      props: {
+        history,
+        setUser
+      }
+    } = this;
+
+    if (!Cookies.get('token')) {
+      return this.setState({ isLoading: false }, () => history.push('/sign-in'));
+    }
+
+    authService
+      .getCurrentUser()
+      .then(user => {
+        setUser(user);
+        this.setState({ isLoading: false });
+      })
+      .catch((err) => {
+        if (err && err.response && err.response.status === 401) {
+          Cookies.remove('token');
+          history.push('/sign-in');
+        }
+        
+        this.setState({ isLoading: false });
+      })
+  }
+
   render() {
     const {
       props: {
         classes
+      },
+      state: {
+        isLoading
       }
     } = this;
     
-    return (
+    return isLoading ? (
+      <div className={classes.loaderContainer}>
+        <CircularProgress />
+      </div>
+    ) : (
       <div>
         <Header />
 
-        <Sidebar />
+        <LeftSidebar />
+        <RightSidebar />
 
         <Switch>
           <Route path="/sign-up" component={SignUp} />
@@ -82,4 +135,12 @@ class App extends Component {
   }
 }
 
-export default withStyles(styles)(App);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  setUser: authActions.setUser
+});
+
+
+export default compose(
+  withStyles(styles),
+  connect(null, mapDispatchToProps)
+)(App);

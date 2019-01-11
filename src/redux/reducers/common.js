@@ -1,30 +1,49 @@
 import {
-  OPEN_DRAWER,
-  CLOSE_DRAWER,
-  TOGGLE_DRAWER,
+  OPEN_LEFT_SIDEBAR,
+  CLOSE_LEFT_SIDEBAR,
+  TOGGLE_LEFT_SIDEBAR,
+  OPEN_RIGHT_SIDEBAR,
+  CLOSE_RIGHT_SIDEBAR,
+  TOGGLE_RIGHT_SIDEBAR,
   RESET_STORE
 } from '../types/common';
 
 const initialState = {
-  isDrawerOpen: false
+  isLeftSidebarOpen: false,
+  isRightSidebarOpen: false
 };
 
 const authReducer = (state = initialState, action) => {
   switch(action.type) {
-    case OPEN_DRAWER:
+    case OPEN_LEFT_SIDEBAR:
       return {
         ...state,
-        isDrawerOpen: true
+        isLeftSidebarOpen: true
       };
-    case CLOSE_DRAWER:
+    case OPEN_RIGHT_SIDEBAR:
       return {
         ...state,
-        isDrawerOpen: false
+        isRightSidebarOpen: true
       };
-    case TOGGLE_DRAWER:
+    case CLOSE_LEFT_SIDEBAR:
       return {
         ...state,
-        isDrawerOpen: !state.isDrawerOpen
+        isLeftSidebarOpen: false
+      };
+    case CLOSE_RIGHT_SIDEBAR:
+      return {
+        ...state,
+        isRightSidebarOpen: false
+      };
+    case TOGGLE_LEFT_SIDEBAR:
+      return {
+        ...state,
+        isLeftSidebarOpen: !state.isLeftSidebarOpen
+      };
+    case TOGGLE_RIGHT_SIDEBAR:
+      return {
+        ...state,
+        isRightSidebarOpen: !state.isRightSidebarOpen
       };
     case RESET_STORE:
       return initialState;

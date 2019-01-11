@@ -1,27 +1,42 @@
 import {
   RESET_STORE,
-  TOGGLE_DRAWER,
-  CLOSE_DRAWER,
-  OPEN_DRAWER
+  OPEN_LEFT_SIDEBAR,
+  OPEN_RIGHT_SIDEBAR,
+  CLOSE_LEFT_SIDEBAR,
+  CLOSE_RIGHT_SIDEBAR,
+  TOGGLE_LEFT_SIDEBAR,
+  TOGGLE_RIGHT_SIDEBAR
 } from '../types/common';
 
 const resetStore = () => ({ type: RESET_STORE });
 
-const openDrawer = () => ({ type: OPEN_DRAWER })
+const openLeftSidebar = () => ({ type: OPEN_LEFT_SIDEBAR });
 
-const closeDrawer = () => ({ type: CLOSE_DRAWER });
+const openRightSidebar = () => ({ type: OPEN_RIGHT_SIDEBAR });
 
-const toggleDrawer = () => ({ type: TOGGLE_DRAWER });
+const closeLeftSidebar = () => ({ type: CLOSE_LEFT_SIDEBAR });
+
+const closeRightSidebar = () => ({ type: CLOSE_RIGHT_SIDEBAR });
+
+const toggleLeftSidebar = () => ({ type: TOGGLE_LEFT_SIDEBAR });
+
+const toggleRightSidebar = () => ({ type: TOGGLE_RIGHT_SIDEBAR });
 
 export {
   resetStore,
-  openDrawer,
-  closeDrawer,
-  toggleDrawer
+  openLeftSidebar,
+  openRightSidebar,
+  closeLeftSidebar,
+  closeRightSidebar,
+  toggleLeftSidebar,
+  toggleRightSidebar
 };
 export default {
   resetStore,
-  openDrawer,
-  closeDrawer,
-  toggleDrawer
+  openLeftSidebar,
+  openRightSidebar,
+  closeLeftSidebar,
+  closeRightSidebar,
+  toggleLeftSidebar,
+  toggleRightSidebar
 };
