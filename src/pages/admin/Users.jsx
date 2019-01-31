@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -100,6 +101,7 @@ class Users extends Component {
   deletePreparedItem = () => {
     const {
       handleError,
+      loadUsers,
       state: {
         preparedItem
       }
@@ -111,6 +113,7 @@ class Users extends Component {
         isDeleteDialogOpen: false,
         preparedItem: null
       }))
+      .then(loadUsers)
       .catch(handleError);
   }
 
@@ -162,6 +165,7 @@ class Users extends Component {
                       <TableRow>
                         <TableCell>Username</TableCell>
                         <TableCell>Email address</TableCell>
+                        <TableCell>Created at</TableCell>
                         <TableCell />
                       </TableRow>
                     </TableHead>
@@ -171,6 +175,7 @@ class Users extends Component {
                           <TableRow key={u._id}>
                             <TableCell>{u.username}</TableCell>
                             <TableCell>{u.email}</TableCell>
+                            <TableCell>{moment(u.createdAt).format('DD/MM/YYYY HH:mm')}</TableCell>
                             <TableCell>
                               <DeleteIcon className="icon" onClick={prepareForDelete(u)}/>
                             </TableCell>
@@ -213,8 +218,8 @@ class Users extends Component {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={closeDeleteDialog} autoFocus>Cancel</Button>
-              <Button onClick={deletePreparedItem} color="primary">Yes, I am sure. Delete it.</Button>
+              <Button onClick={closeDeleteDialog} variant="contained" autoFocus>Cancel</Button>
+              <Button onClick={deletePreparedItem} variant="contained" color="primary">Yes, I am sure. Delete it.</Button>
             </DialogActions>
           </Dialog>
         </div>
