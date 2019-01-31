@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import LogoIcon from '../images/logo.svg';
+
 import ButtonLink from './ButtonLink';
 
 import commonActions from '../redux/actions/common'
@@ -24,7 +26,8 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
-  logo: {
+  logoText: {
+    marginLeft: 6,
     fontFamily: `'Acme', sans-serif`,
     fontSize: 26,
     textTransform: 'none'
@@ -47,11 +50,18 @@ class Header extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={toggleLeftSidebar}>
-              <MenuIcon />
-            </IconButton>
+            {
+              !!auth.user && (
+                <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={toggleLeftSidebar}>
+                  <MenuIcon />
+                </IconButton>
+              ) 
+            }
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              <ButtonLink to="/" buttonProps={{ className: classes.logo }}>picxr</ButtonLink>
+              <ButtonLink to="/">
+                <img alt="logo" src={LogoIcon} width="28" />
+                <span className={classes.logoText}>picxr</span>
+              </ButtonLink>
             </Typography>
             {
               !auth.user ? (
