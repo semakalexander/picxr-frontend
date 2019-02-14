@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import { compose } from 'redux';
 import Cookies from 'js-cookie';
 
 import { Switch, Route } from 'react-router';
@@ -10,6 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import SignUp from './auth/SignUp';
 import SignIn from './auth/SignIn';
 import Users from './admin/Users';
+import Combiner from './admin/Combiner';
 
 import Header from '../components/Header';
 import LeftSidebar from '../components/LeftSidebar';
@@ -17,13 +19,15 @@ import RightSidebar from '../components/RightSidebar';
 
 import authService from '../services/auth';
 
-import TinyBack from '../images/back-tiny.jpg'
+
+import authActions from '../redux/actions/auth';
+
+import TinyBack from '../images/back-tiny.jpg';
+
+import { bindActionCreators } from '../redux/utils';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
-import authActions from '../redux/actions/auth';
-import { bindActionCreators } from '../redux/utils';
-import { compose } from 'redux';
 
 const styles = theme => ({
   backgroundContainer: {
@@ -120,6 +124,7 @@ class App extends Component {
           <Route path="/sign-up" component={SignUp} />
           <Route path="/sign-in" component={SignIn} />
           <Route path="/admin/users" component={Users} />
+          <Route path="/admin/combiner" component={Combiner} />
         </Switch>
 
         <ToastContainer

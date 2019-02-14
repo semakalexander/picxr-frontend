@@ -17,6 +17,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import InfoIcon from '@material-ui/icons/Info';
 import BugReportIcon from '@material-ui/icons/BugReport';
 import FeedbackIcon from '@material-ui/icons/Feedback';
+import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 
 import commonActions from '../redux/actions/common';
 
@@ -28,6 +29,11 @@ const listItems = {
       text: 'Users',
       link: '/admin/users',
       icon: <FaceIcon />
+    },
+    {
+      text: 'Images',
+      link: '/admin/combiner',
+      icon: <PhotoAlbumIcon />
     },
     {
       text: 'Complaints',
