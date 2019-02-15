@@ -22,7 +22,7 @@ import authService from '../services/auth';
 
 import authActions from '../redux/actions/auth';
 
-import TinyBack from '../images/back-tiny.jpg';
+import BackgroundImage from '../images/back.png';
 
 import { bindActionCreators } from '../redux/utils';
 
@@ -42,7 +42,7 @@ const styles = theme => ({
     zIndex: -999
   },
   background: {
-    background: `url(${TinyBack})`,
+    background: `url(${BackgroundImage})`,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
