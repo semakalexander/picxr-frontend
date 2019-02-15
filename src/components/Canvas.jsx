@@ -1,5 +1,10 @@
 import React, { Component, createRef } from 'react';
+
 import { withStyles } from '@material-ui/core/styles';
+
+import notifications from '../utilities/notifications';
+
+import combinerService from '../services/combiner';
 
 const styles = {
   container: {
@@ -7,6 +12,9 @@ const styles = {
   },
   canvas: {
     display: 'none'
+  },
+  img: {
+    cursor: 'pointer'
   }
 };
 
@@ -35,8 +43,8 @@ class Canvas extends Component {
 
     this.state = {
       canvasSize: this.reComputeCanvasSize(),
-      result: null,
-      resultHref: null
+      resultUri: null,
+      resultBlob: null
     }
     this.canvas = createRef();
   }
@@ -127,28 +135,47 @@ class Canvas extends Component {
         });
 
 
-        canvas.toBlob(blob => this.setState({ resultHref: URL.createObjectURL(blob) }));
+        canvas.toBlob(blob => this.setState({ resultUri: URL.createObjectURL(blob), resultBlob: blob }));
       });
     }
+  }
+
+  save = () => {
+    const {
+      state: {
+        resultBlob
+      }
+    } = this;
+
+    combinerService
+      .setBackgroundImage(resultBlob)
+      .then(() => notifications.success('Backround image was successfully saved'));
   }
 
   render() {
     const {
       canvas,
+      save,
       props: {
         classes
       },
       state: {
         canvasSize,
-        resultHref
+        resultUri
       }
     } = this;
 
     return (
       <div className={classes.container}>
+        
         {
-         resultHref && (
-          <img alt="result" src={resultHref} /> 
+         resultUri && (
+          <img
+            alt="result"
+            src={resultUri}
+            className={classes.img}
+            onClick={save}
+          /> 
          )
         }
         <canvas

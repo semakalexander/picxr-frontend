@@ -12,7 +12,9 @@ import App from './pages/App';
 
 import store from './redux/store';
 
-axios.defaults.baseURL = 'http://localhost:9000/api';
+import { BASE_URL } from './constants/api';
+
+axios.defaults.baseURL = `${BASE_URL}/api`;
 
 const theme = createMuiTheme({
   typography: {

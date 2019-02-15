@@ -22,9 +22,9 @@ import authService from '../services/auth';
 
 import authActions from '../redux/actions/auth';
 
-import BackgroundImage from '../images/back.png';
-
 import { bindActionCreators } from '../redux/utils';
+
+import { BASE_URL } from '../constants/api';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
@@ -42,7 +42,7 @@ const styles = theme => ({
     zIndex: -999
   },
   background: {
-    background: `url(${BackgroundImage})`,
+    background: `url(${BASE_URL}/static/images/background-image.png)`,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
