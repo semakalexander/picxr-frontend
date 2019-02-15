@@ -5,7 +5,7 @@ import ReactDropzone from 'react-dropzone';
 
 const styles = {
   container: {
-    height: 300,
+    height: 220,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

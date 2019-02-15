@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './index.css';
+import 'rc-slider/assets/index.css';
 
 import App from './pages/App';
 

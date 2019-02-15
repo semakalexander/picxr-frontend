@@ -2,40 +2,36 @@ import React, { Component, createRef } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 
+import Slider from 'rc-slider';
+
 import notifications from '../utilities/notifications';
 
 import combinerService from '../services/combiner';
 
 const styles = {
   container: {
-    backgroundColor: '#fff'
+    overflow: 'hidden'
   },
   canvas: {
     display: 'none'
   },
   img: {
     cursor: 'pointer'
-  }
+  },
+  sliderContainer: {
+    backgroundColor: '#fff',
+    margin: 20,
+    padding: '40px 20px'
+  },
 };
 
 const isExist = v => typeof v !== 'undefined';
 
-const max = (v1, v2) => {
-  if (!v2) return v1;
+const toChunks = dimension => arr => [...new Array(Math.ceil(arr.length / dimension))].reduce(({ chunks, i }) => ({
+  chunks: [...chunks, arr.slice(i, i + dimension).filter(isExist)],
+  i: i + dimension
+}), { chunks: [], i: 0 }).chunks;
 
-  return v1 > v2 ? v1 : v2;
-};
-
-const min = (v1, v2) => {
-  if (!v2) return v1;
-
-  return v1 < v2 ? v1 : v2;
-};
-
-const tuple = arr => [...new Array(Math.ceil(arr.length / 2))].reduce(({ objs, i }) => ({
-  objs: [...objs, isExist(arr[i+1]) ? [arr[i], arr[i+1]] : [arr[i]]],
-  i: i + 2
-}), {objs: [], i: 0}).objs;
 
 class Canvas extends Component {
   constructor(props) {
@@ -44,8 +40,10 @@ class Canvas extends Component {
     this.state = {
       canvasSize: this.reComputeCanvasSize(),
       resultUri: null,
-      resultBlob: null
-    }
+      resultBlob: null,
+      dimension: 2
+    };
+
     this.canvas = createRef();
   }
 
@@ -63,15 +61,16 @@ class Canvas extends Component {
 
     const {
       state: {
-        canvasSize
+        canvasSize,
+        dimension
       }
     } = this;
 
     switch(type) {
       case 'half':
         return {
-          width: canvasSize.width / 2,
-          height: ((canvasSize.width / 2) * img.height) / img.width
+          width: canvasSize.width / dimension,
+          height: ((canvasSize.width / dimension) * img.height) / img.width
         };
       case 'full':
         return {
@@ -88,8 +87,16 @@ class Canvas extends Component {
       computeImgSize,
       canvas: {
         current: canvas
+      },
+      props: {
+        imageSrcs
+      },
+      state: {
+        dimension
       }
     } = this;
+
+    if (!srcs) srcs = imageSrcs;
 
     if (canvas) {
       const loadImage = src => new Promise((res) => {
@@ -103,8 +110,9 @@ class Canvas extends Component {
 
       const ctx = canvas.getContext('2d');
 
-      const tuples = tuple(images);
-      const newCanvasSizeHeight = tuples.reduce((height, tuple) => height + min(...tuple.map(computeImgSize).map(v => v.height)), 0);
+      const chunks = toChunks(dimension)(images);
+      const newCanvasSizeHeight = chunks
+        .reduce((height, chunk) => height + Math.min(...chunk.map(computeImgSize).map(v => v.height)), 0);
 
 
       this.setState(prev => ({
@@ -114,21 +122,24 @@ class Canvas extends Component {
         }
       }), () => {
         let currentHeight = 0;
-        tuples.forEach(tuple => {
+        chunks.forEach(chunk => {
           let newHeight = 0;
-          if (tuple[1]) {
-            const [computedImgSize1 = {}, computedImgSize2 = {}] = tuple.map(computeImgSize);
+          if (chunk.length > 1) {
+            const computedImgSizes = chunk.map(computeImgSize);
   
-            newHeight = min(computedImgSize1.height, computedImgSize2.height);
+            newHeight = Math.min(...computedImgSizes.map(v => v.height));
+            let widthOffset = 0;
 
-            ctx.drawImage(tuple[0], 0, currentHeight, computedImgSize1.width, computedImgSize1.height);
-            ctx.drawImage(tuple[1], computedImgSize1.width, currentHeight, computedImgSize2.width, computedImgSize2.height);
+            computedImgSizes.forEach((size, i) => {
+              ctx.drawImage(chunk[i], widthOffset, currentHeight, size.width, size.height);
+              widthOffset += size.width;
+            });
           } else {
-            const computedSize1 = computeImgSize(tuple[0], { type: 'full' });
+            const computedSize1 = computeImgSize(chunk[0], { type: 'full' });
 
             newHeight = computedSize1.height;
 
-            ctx.drawImage(tuple[0], 0, currentHeight, computedSize1.width, computedSize1.height);
+            ctx.drawImage(chunk[0], 0, currentHeight, computedSize1.width, computedSize1.height);
           }
 
           currentHeight += newHeight;
@@ -152,22 +163,36 @@ class Canvas extends Component {
       .then(() => notifications.success('Backround image was successfully saved'));
   }
 
+  onDimensionChange = (value) => this.setState({ dimension: value,resultUri: null }, this.draw);
+
   render() {
     const {
       canvas,
       save,
+      onDimensionChange,
       props: {
         classes
       },
       state: {
         canvasSize,
-        resultUri
+        resultUri,
+        dimension
       }
     } = this;
 
     return (
       <div className={classes.container}>
-        
+        <div className={classes.sliderContainer}>
+          <Slider
+            min={1}
+            max={10}
+            step={1}
+            marks={[...new Array(10)].reduce((marks, _, i) => ({ ...marks, [i]: i }), {})}
+            defaultValue={dimension}
+            onAfterChange={onDimensionChange}
+            dots
+          />
+        </div>
         {
          resultUri && (
           <img
